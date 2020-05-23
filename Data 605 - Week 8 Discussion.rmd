@@ -1,0 +1,42 @@
+---
+title: "Data 605 - Week 8 Discussion"
+author: "Habib Khan"
+date: "March 22, 2020"
+output: html_document
+---
+
+```{r, echo=FALSE}
+knitr::include_graphics('8.png')
+```
+
+```{r}
+# if p = 0
+zero <- 1/8 * 1/8
+zero
+```
+
+
+```{r}
+# if p = 1
+one <- 1/8 * 3/8 + 3/8 * 1/8
+one
+```
+
+```{r}
+# if p = 2
+two<-1/8 * 1/2 + 3/8 * 3/8 + 1/2 * 1/8
+two
+```
+
+```{r}
+# if p = 3
+three<- 3/8 * 1/2 + 1/2 * 3/8
+three
+```
+
+```{r}
+# if p = 4
+four <- 1/2 * 1/2
+four
+```
+

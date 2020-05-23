@@ -1,0 +1,29 @@
+---
+title: "Data 605 - Week 9 Discussion"
+author: "Habib Khan"
+date: "March 29, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 10 from Page 339
+
+## Find the probability that among 10,000 random digits the digit 3 appears not more than 931 times. 
+
+```{r}
+times <- 931
+random <- 10000
+prob <- 1/10
+mu <- random*prob
+
+a_sq <- (random*prob)*(1-prob)
+a <- sqrt(a_sq)
+
+answer <- (times-mu)/a
+pnorm(answer)*100
+```
+
+Probability that among 10,000 random digits the digit 3 appears is 1.072411 %

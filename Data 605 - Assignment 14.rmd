@@ -1,0 +1,38 @@
+---
+title: "Data 605 - Assignment 14"
+author: "Habib Khan"
+date: "May 10, 2020"
+output: html_document
+---
+
+# Assignment 14
+
+```{r}
+knitr::include_graphics('14.png')
+```
+
+## Problem 1
+
+```{r}
+library(pracma)
+eq <- function(x) {1/(1-x)}
+prob1 <- taylor(eq, x0=0, n=4)
+prob1
+```
+
+## Problem 2
+
+```{r}
+eq2 <- function(x) {exp(x)}
+prob2 <- taylor(eq2, x0=0, n=4)
+prob2
+```
+
+## Problem 3
+
+```{r}
+eq3 <- function(x) {log(1+x)}
+prob3 <- taylor(eq3, x0=0,n=4)
+prob3
+```
+

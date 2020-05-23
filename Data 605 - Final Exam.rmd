@@ -1,0 +1,388 @@
+---
+title: "Data 605 - Final Exam"
+author: "Habib Khan"
+date: "May 19, 2020"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+```{r, message=FALSE, warning=FALSE}
+library(knitr)
+library(pracma)
+library(kableExtra)
+library(tidyr)
+library(ggplot2)
+library(data.table)
+library(DT)
+library(psych)
+library(scales)
+library(corrplot)
+library(dplyr)
+library(stringr)
+library(matrixcalc)
+library(MASS)
+```
+
+# Problem 1
+
+## 1.1 Random variables
+
+Using R, generate a random variable X that has 10,000 random uniform numbers from 1 to N, where N can be any number of your choosing greater than or equal to 6.  Then generate a random variable Y that has 10,000 random normal numbers with a mean of (N+1)/2.  
+
+```{r}
+set.seed(1025)
+
+N <- round(runif(1,6,100))
+n <- 10000
+
+# Generating Variable X
+X <- runif(n, min=0, max=N)
+hist(X)
+
+# Generating variable y 
+Y <- rnorm(n, (N+1)/2,(N+1)/2)
+hist(Y)
+
+```
+
+## 1.2 Probability
+
+Calculate as a minimum the below probabilities a through c.  Assume the small letter "x" is estimated as the median of the X variable, and the small letter "y" is estimated as the 1st quartile of the Y variable.  Interpret the meaning of all probabilities.
+
+```{r}
+x <- median(X)
+round(x, 3)
+
+y <- quantile(Y, 0.25)[[1]]
+round(y, 3)
+```
+
+(a)
+
+```{r}
+P1 <- sum(X > x & X>y)
+P2 <- sum(X > y)
+
+print(P1/P2)
+```
+
+(b)
+
+```{r}
+P3 <- sum(X>x & Y > y)/n
+print(P3)
+```
+
+(c)
+
+```{r}
+P4 <- sum(X<x & X>y)/n
+print(P4)
+```
+
+## 1.3 Marginal and joint probabilities
+
+Investigate whether P(X>x and Y>y)=P(X>x)P(Y>y) by building a table and evaluating the marginal and joint probabilities.
+
+```{r}
+# Creating matrix 
+matrix<-matrix( c(sum(X>x & Y<y),sum(X>x & Y>y), sum(X<x & Y<y),sum(X<x & Y>y)), nrow = 2,ncol = 2)
+matrix<-cbind(matrix,c(matrix[1,1]+matrix[1,2],matrix[2,1]+matrix[2,2]))
+matrix<-rbind(matrix,c(matrix[1,1]+matrix[2,1],matrix[1,2]+matrix[2,2],matrix[1,3]+matrix[2,3]))
+table <- as.data.frame(matrix)
+
+# Editing row and column names
+names(table) <- c("X > x", "X < x", "Overall")
+row.names(table) <- c("Y < y", "Y > y", "Overall")
+head(table) %>% kable() %>% kable_styling()
+
+# computing probability from the above table
+
+matrix_probability <- matrix / matrix[3,3]
+matrix_probability <- as.data.frame(matrix_probability)
+names(matrix_probability) <- c("X > x", "X < x", "Overall")
+row.names(matrix_probability ) <- c("Y < y", "Y > y", "Overall")
+head(matrix_probability) %>% kable() %>% kable_styling()
+```
+
+```{r}
+# Now let's if both probabilities are equal
+
+prob1 <- matrix_probability[3,1]* matrix_probability[2,3] 
+prob1 
+
+prob2 <- round(matrix_probability[2,1],3)
+prob2 
+
+# Computing for P(X>x and Y>y)=P(X>x)P(Y>y)
+prob1 == prob2
+```
+
+Hence, it is proved that both sides of probabilities are equal as asked in question.
+
+## 1.4 Fisher test and chi-sq for independence
+
+Check to see if independence holds by using Fisher’s Exact Test and the Chi Square Test.  What is the difference between the two? Which is most appropriate?
+
+H0 : All events are independent
+Ha: Both events are dependent
+
+```{r}
+# Fisher's Exact test
+fisher <- fisher.test(table, simulate.p.value = TRUE)
+fisher
+
+# Chi-square test
+chisq <- chisq.test(table)
+chisq
+```
+
+p-values for Fisher test and chi-square test are 1 and 0.999 which is extremely insignificant. Hence, it rejects the null hypothesis and accepts the Ha which means both events are dependent as we previously confirmed in last question. It's proved here through fisher test and chi-square as well.
+
+
+# Problem 2
+
+You are to register for Kaggle.com (free) and compete in the House Prices: Advanced Regression Techniques competition.  https://www.kaggle.com/c/house-prices-advanced-regression-techniques .  I want you to do the following.
+
+## 2.1 Descriptive and Inferential Statistics
+
+Provide univariate descriptive statistics and appropriate plots for the training data set.  Provide a scatterplot matrix for at least two of the independent variables and the dependent variable. Derive a correlation matrix for any three quantitative variables in the dataset.  Test the hypotheses that the correlations between each pairwise set of variables is 0 and provide an 80% confidence interval.  Discuss the meaning of your analysis.  Would you be worried about familywise error? Why or why not?
+
+```{r}
+# Reading the dataset
+train <- read.csv("C:/Users/hukha/Desktop/MS - Data Science/Data 605 - Computational Mathematics/FinalExam-dataset/train.csv", header = TRUE)
+```
+
+### Descriptive summary
+
+```{r}
+# Descriptive statistics of TRAIN dataset
+summary(train) 
+describe(train) %>% DT::datatable()
+```
+
+### Scatterplot matrix
+
+
+```{r}
+# Checking neighborhood on salesprice
+ggplot(train) + geom_boxplot(aes(x=reorder(Neighborhood, SalePrice),y=SalePrice, fill=Neighborhood))+theme(axis.text.x = element_text(angle=60))+scale_y_continuous(label=dollar)
+
+# Checking CentralAir's relationship on salesprice
+ggplot(train) + geom_boxplot(aes(x=reorder(CentralAir, SalePrice),y=SalePrice, fill=CentralAir))+theme(axis.text.x = element_text(angle=60))+scale_y_continuous(label=dollar)
+
+# Overallcondition on salesprice
+ggplot(train, aes(x=LotArea, y=SalePrice)) + geom_point()+geom_smooth(method="lm")+ scale_y_continuous(label=comma)+xlim(0,40000)
+```
+
+According to visualizations, different neighborhood has different house prices which totally makes sense. Likewise, if house has central air then the price is comparatively higher than the houses with no central air. LotArea also seems to have positive relationship with SalePrice but there are also other factors that might influence the SalePrice. 
+
+
+### Correlation matrix
+
+Now let's create a correlation matrix for three quantitative independent variables
+
+```{r}
+# Filtering quantitative variables
+
+# Creating correlation matrix and plot
+train_cor <- train %>% dplyr::select(LotArea, OverallCond, OverallQual, TotalBsmtSF, SalePrice)
+
+train_m <- cor(train_cor, method="pearson", use="complete.obs")
+train_m
+
+# Creating correlation plot
+corrplot(train_m, type="upper", order="hclust", tl.col="black", tl.srt=45, addCoef.col = "white")
+```
+
+Correlation matrix shows that all variables have correlation with SalePrice. OverallCond does not have very significant impact on Sales Price but LotArea, TotalBsmntSF and OverallQual have positive relationship with Sales Price. 
+
+### Hypothesis testing
+
+OverallCond and SalePrice
+
+```{r}
+# Checking relationship between overallCond and SalePrice
+cor.test(train_cor$SalePrice, train_cor$OverallCond, conf.level=0.80)
+```
+
+There is very little correlation between OverallCond and SalePrice as correlation value is -0.077 but p-value is 0.002912 which shows significance relationship between the said variables.
+
+LotArea and SalePrice
+
+```{r}
+cor.test(train_cor$SalePrice, train_cor$LotArea, conf.level = 0.80)
+```
+
+There is a significant correlation between LotArea and SalePrice but relationship is not very strong as it is almost 0.27 which shows weak relationship between SalePrice and OverallCond.
+
+TotalBsmtSF and SalePrice
+
+```{r}
+cor.test(train_cor$SalePrice, train_cor$TotalBsmtSF, conf.level = 0.80)
+```
+
+TotalBsmtSF has significantly positive relationship with Sales Price. It makes sense that as the size of basement square feet increases, house price also goes up. 
+
+OVerallQual and Sales Price
+
+```{r}
+cor.test(train_cor$SalePrice, train_cor$OverallQual, conf.level = 0.80)
+```
+
+Overall Quality has also high positive relationship with Sales Price. Strength of relationship is 0.79 which is quite strong. 
+
+### Family-wise error 
+
+It refers to the prbability of making one or more false discoveries. It is also known as Type I error which occurs during hypotheses testing. I would not worry about Type I error as the p-values are very low. 
+
+## 2.2 Linear algebra and correlation
+
+Invert your correlation matrix from above. (This is known as the precision matrix and contains variance inflation factors on the diagonal.) Multiply the correlation matrix by the precision matrix, and then multiply the precision matrix by the correlation matrix. Conduct LU decomposition on the matrix.  
+
+### Inverting the correlation matrix
+
+```{r}
+# Existing correlation matrix
+train_m
+
+# Inverting correlation matrix
+train_inverted <- inv(train_m)
+train_inverted
+```
+
+### Precision and correlation matrices
+
+```{r}
+# Multiplying the correlation matrix with inverted
+p1 <- train_m %*% train_inverted
+round(p1)
+
+# Mulitplying inverted with matrix
+p2 <- train_inverted %*% train_m
+round(p2)
+```
+Both results in the identity matrix as we can see 1 in diagonal in both matrices. 
+
+### LU Decomposition
+
+```{r}
+train_lu <- lu.decomposition(train_m)
+train_lu 
+
+# Checking if decomposition results in original correlation matrix
+train_lu2 <- train_lu$L %*% train_lu$U
+round(train_lu2,4) == round(train_m, 4)
+```
+
+
+## 2.3 Calculus-Based Probability & Statistics
+
+Many times, it makes sense to fit a closed form distribution to data.  Select a variable in the Kaggle.com training dataset that is skewed to the right, shift it so that the minimum value is absolutely above zero if necessary.  Then load the MASS package and run fitdistr to fit an exponential probability density function.  (See  https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/fitdistr.html ).  Find the optimal value of  for this distribution, and then take 1000 samples from this exponential distribution using this value (e.g., rexp(1000, )).  Plot a histogram and compare it with a histogram of your original variable.   Using the exponential pdf, find the 5th and 95th percentiles using the cumulative distribution function (CDF).   Also generate a 95% confidence interval from the empirical data, assuming normality.  Finally, provide the empirical 5th percentile and 95th percentile of the data.  Discuss.
+
+### Select a variable and shift 
+
+```{r}
+# Value of Miscellaneous feature
+hist(train$SalePrice, main="House Sales Price", col="red")
+
+# Transforming variable
+hist_t <- abs(scale(train$SalePrice))
+hist(hist_t, main="Exponential - Sales Price", col="blue")
+```
+
+### Fit Exponential Probability Density Function
+
+```{r}
+train_fit <- fitdistr(hist_t, densfun="exponential")
+train_fitest <- train_fit$estimate
+train_fitest
+
+# Take sample of 1000
+hist(rexp(1000, train_fit$estimate), breaks=100, main="Fitted Exponential Probability Density Function")
+
+# Comparing it with original variable i.e. SalePrice
+hist(train$SalePrice, breaks=100, main="Sales Price")
+```
+After fitting to exponential probability density function, rate of change is 1.383178.
+
+
+```{r}
+# 5th and 95th percentile using cumulative distribution function
+paste0("The 5th percentile is ", qexp(0.05, rate= train_fitest, log.p = FALSE, lower.tail = TRUE))
+
+paste0("The 95 percentile is ", qexp(0.95, rate=train_fitest, log.p=FALSE, lower.tail = TRUE))
+```
+
+```{r}
+# now let's check the original variable and compare them
+sp_mean <- mean(train$SalePrice)
+sp_sd <- sd(train$SalePrice)
+qnorm(0.95, sp_mean, sp_sd)
+
+# now let's check out 5th and 95th percentile for SalesPrice
+quantile(train$SalePrice, c(0.05,0.95))
+```
+
+
+## 2.4 Modeling
+
+Build some type of multiple regression  model and submit your model to the competition board.  Provide your complete model summary and results with analysis.  Report your Kaggle.com user name and score.
+
+
+```{r}
+# Selecting only variables that are numeric
+train_variables <- select_if(train, is.numeric)
+
+# Creating a model
+train_model <- lm(data=train_variables, SalePrice ~ .)
+summary(train_model)
+```
+
+Although Adjusted R-square is 0.8034 right now but there are lots of insignificant variables in the model which we have to exclude. Final model is below after elimination of variables from the model. The final adjusted r-square is 0.7703 which shows that the model is strong.
+
+```{r}
+# Modifying the model after eliminating insignificant variables
+train_model2 <- lm(data=train_variables, SalePrice ~ MSSubClass + LotArea + OverallQual + OverallCond + YearBuilt + MasVnrArea + BsmtFinSF1 + BsmtFullBath + TotRmsAbvGrd + Fireplaces + WoodDeckSF +ScreenPorch)
+
+summary(train_model2)
+```
+
+F-statistics shows that the model is significant. 
+
+```{r}
+# Checking normality
+par(mfrow=c(2,2))
+plot(train_model2)
+```
+
+Plots above show that data is normal with some outliers but statistically the model is significant. 
+
+```{r}
+# Reading the test data
+test <- read.csv("C:/Users/hukha/Desktop/MS - Data Science/Data 605 - Computational Mathematics/FinalExam-dataset/test.csv", header = TRUE)
+
+# Predicting the test data
+train_pred <- predict(train_model2, test)
+
+# Creating dataframe to save to kaggle
+train_pred2 <- data.frame(Id = test[,"Id"], SalePrice = train_pred)
+
+# Replacing missing values
+train_pred2 <- replace(train_pred2, is.na(train_pred2),0)
+
+# Writing csv file
+write.csv(train_pred2, "kaggle_pred.csv")
+```
+
+
+## Kaggle and youtube link
+
+```{r}
+knitr::include_graphics('capture.png')
+print("My kaggle ID is habibkhan89 and my score is 1.32115")
+```
+
+Link for presentation: https://youtu.be/4ktm6Ov6liY

@@ -1,0 +1,23 @@
+---
+title: "Data 605 - Week 14 Discussion"
+author: "Habib Khan"
+date: "May 10, 2020"
+output: html_document
+---
+
+# Problem 8.8.3
+
+
+
+```{r}
+
+library(pracma)
+
+
+equation <- function(x){exp(x)}
+c=0
+n=8
+
+taylor(equation, c, n)
+```
+

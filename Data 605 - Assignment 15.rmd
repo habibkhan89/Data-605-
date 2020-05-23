@@ -1,0 +1,62 @@
+---
+title: "Data 605 - Assignment 15"
+author: "Habib Khan"
+date: "May 17, 2020"
+output: html_document
+---
+
+# Assignment 15
+
+
+## 1
+
+```{r}
+x <- c(5.6, 6.3, 7, 7.7, 8.4)
+y <- c(8.8, 12.4, 14.8, 18.2, 20.8)
+
+# regression
+ans1 <- lm(y ~ x)
+summary(ans1)
+```
+
+Model is: 
+
+y = -14.8 + 4.2571(x)
+
+## 3 
+
+```{r}
+x <- 2.3
+y <- 4.1
+z <- -21*(x^2) - 23*(y^2) + 28*x*y + 81*x +40*y
+print(paste0("The revenue is ", z))
+```
+
+## 4
+
+```{r}
+knitr::include_graphics('15.4.png')
+```
+
+
+## 5
+
+
+```{r}
+e <- exp(1)
+
+# Let's calculate the answer
+answer4 <- ((e^44 - e^38)/24) - ((e^28 - e^22)/24)
+print(answer4)
+```
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,35 @@
+---
+title: "Data 605 - Discussion 3"
+author: "Habib Khan"
+date: "February 12, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Problem C11
+
+```{r}
+knitr::include_graphics('3.png')
+```
+
+```{r}
+# Loading the library
+
+library(pracma)
+library(dplyr)
+
+# Create matrix to feed data into R
+
+A <- matrix(c(3,0,1,2,1,2,1,1,0), nrow=3)
+A
+# Now let's find out the characteristic polynomial of the defined matrix
+
+A %>% charpoly()
+```
+
+# Conclusion
+
+The characteristic polynomial of above matrix is 1, -4, 0 and 5.

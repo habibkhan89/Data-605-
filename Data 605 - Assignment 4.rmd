@@ -1,0 +1,91 @@
+---
+title: "Data 605 - Week 4 Assignment"
+author: "Habib Khan"
+date: "February 23, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+knitr::include_graphics('4-1.png')
+```
+
+```{r}
+# Creating matrix A
+
+A <- matrix(c(1,-1,2,0,3,4), nrow=2, ncol=3)
+A
+
+# Transformation
+
+X <- A %*% t(A)
+X
+
+Y <- t(A) %*% A
+Y
+
+
+# Calculate eigvenvalues and eigenvectors
+
+eigen_X <- eigen(X)
+print(eigen_X) # Printing eigenvalues and eigenvectors for X
+
+eigen_Y <- eigen(Y)
+print(eigen_Y) # Printing eigenvalues and eigenvectors for Y
+
+
+# Calculate left-singular, singular and right-singular functions using SVD function
+
+svd_a <- svd(A)
+
+
+svd_a$u # left-singular 
+svd_a$d # Singular
+svd_a$v # Right-singular
+```
+
+In above results, we can clearly see that left singular contains eigenvectors of X and right singular contains eigenvectors of Y and hence they are equivalent. 
+
+
+```{r}
+ans <- svd_a$d^2
+ans
+```
+
+It's proved that both X and Y's eigenvalues are same and thus are square of A
+
+```{r}
+knitr::include_graphics('4-2.png')
+```
+
+```{r}
+# Cretating function to compute inverse 
+inv <- function(x) {
+  # check if matrix is square
+  if(nrow(x) != ncol(x)) { return('takes only squre matrix as input')}
+  cofactor_Matrix <- matrix(rep(0,length(x)),ncol=ncol(x))
+  for (i in 1:ncol(x)) {
+    for (j in 1:nrow(x)) {
+      cofactor_Matrix[i,j] <- det(x[-i,-j])*(-1)^(i+j) 
+    }
+  }
+  return(t(cofactor_Matrix)/det(x)) 
+}
+
+# Now let's create a random matrix of 3 rows
+
+A <- matrix(c(1,1,0,2,1,1,1,2,1),nrow=3)
+A
+
+
+# Now let's test the create function "inv"
+B <- inv(A)
+B
+
+# Round to see identity matrix (I)
+round(A %*% B)
+```
+

@@ -1,0 +1,74 @@
+---
+title: "Data 605 - Assignment 8"
+author: "Habib Khan"
+date: "March 22, 2020"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+# Problem 11 from Page 303
+
+```{r, echo=FALSE}
+knitr::include_graphics('8-1.png')
+```
+
+The expected lifetime time is 1000 hours so lambda would be 1/1000. As per the situation, if 100 lightbulbs are bought then 100 x lambda would be 1/10. Expected minimum lifetime is 1/1/10 which is 10 hours.
+
+# Problem 14 from Page 303
+
+```{r, echo=FALSE}
+knitr::include_graphics('8-2.png')
+```
+
+
+```{r, echo=FALSE}
+knitr::include_graphics('8.2.png')
+```
+
+
+# Problem 1 from Page 320
+
+
+```{r, echo=FALSE}
+knitr::include_graphics('8-3.png')
+```
+
+## (a)
+
+```{r}
+# (a)
+
+mu <- 10
+sigma_square <- 100/3
+sigma_square/2^2
+
+
+```
+
+## (b)
+
+```{r}
+# (b)
+
+sigma_square2 <- 100/3
+sigma_square2/5^2
+```
+
+## (c)
+
+```{r}
+# (c)
+
+sigma_square3 <- 100/3
+sigma_square3/9^2
+```
+
+## (d)
+
+```{r}
+sigma_square4 <- 100/3
+sigma_square4/20^2
+```
+

@@ -1,0 +1,69 @@
+---
+title: "Data 605 - Week 13 Discussion"
+author: "Habib Khan"
+date: "April 26, 2020"
+output: html_document
+---
+
+# Week 13 Discussion - Multiple Regression using R
+
+Using R, build a multiple regression model for data that interests you.  Include in this model at least one quadratic term, one dichotomous term, and one dichotomous vs. quantitative interaction term.  Interpret all coefficients. Conduct residual analysis.  Was the linear model appropriate? Why or why not?
+
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
+library(tidyr)
+library(knitr)
+library(dplyr)
+library(utils)
+library(tidyverse)
+library(kableExtra)
+
+carprice <- read_csv("C:/Users/hukha/Desktop/carprice.csv", col_names = TRUE)
+#glimpse(carprice)
+#head(carprice) %>% kable() %>% kable_styling()
+```
+
+```{r}
+# Required data
+carprice2 <- carprice %>% select(fueltype, carbody, horsepower, citympg, highwaympg, price) 
+print(carprice2)
+
+# Converting into factor
+
+list <- c("fueltype", "carbody")
+carprice2[,list] <- lapply(carprice2[,list], factor)
+glimpse(carprice2)
+
+
+head(carprice2) %>% kable() %>% kable_styling()
+```
+
+
+```{r}
+model <- lm(price ~ fueltype + horsepower + citympg + highwaympg, data=carprice2)
+summary(model)
+```
+
+
+Using backward elimination technique, let's remove citympg from the model and update the model again
+
+```{r}
+model <- lm(price ~ fueltype + horsepower + highwaympg, data=carprice2)
+summary(model)
+```
+
+Actually after removing citympg the model did not improve but since it did not have impact so we will consider it excluding from the model. Model predicts 73.19% of the variance and the model is good. Also, f-statistics shows that there is variation between mean of the predictors. According to summary statistics, gas and highwaympg has negative impact on price while horsepower has positive impact on the price of vehicle. It makes sense because as the horsepower of the vehicle gets higher, vehicle's price also go up. Fueltype is a factor where there are two categories (gas and diesel). It has negative impact on price i.e. vehicles having gas have negative impact as oppose to vehicles with diesel are expensive. With highwaympg, it does not sound sane but as the horsepower of vehicle gets high, its price also goes up which means the vehicles are less fuel efficient but other factors contribute to the price.
+
+```{r}
+ggplot(carprice2, aes(horsepower, price))+geom_point()+geom_smooth(method="lm", se=FALSE)+labs(title="Horsepower vs price of vehicle")
+ggplot(carprice2, aes(fueltype, price))+geom_point()+geom_smooth(method="lm", se =FALSE)+labs(title="Fuel type (GAS) vs price of vehicle")
+ggplot(carprice2, aes(highwaympg, price))+geom_point()+geom_smooth(method="lm", se=FALSE)+labs(title="Vehicle's price VS Highway MPG")
+```
+
+Now let's check the residual of the model
+
+```{r}
+qqnorm(model$residuals)
+qqline(model$residuals)
+```
+
+The model is not very normal as the values are not near the line on the right side. 

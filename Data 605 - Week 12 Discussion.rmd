@@ -1,0 +1,50 @@
+---
+title: "Data 605 - Week 12 Discussion"
+author: "Habib Khan"
+date: "April 19, 2020"
+output: html_document
+---
+
+# Introduction
+
+The dataset has been taken from Kaggle's famous Titanic dataset where I will going to see linear regression between age and fare ticket. I want to see if a passenger's age had any relationship with the affordability of fare.
+
+```{r}
+library(tidyr)
+library(dplyr)
+
+titanic_ds <- read.csv("train.csv", header = TRUE)
+glimpse(titanic_ds)
+```
+
+# Regression Model
+
+```{r}
+model <- lm(Fare ~ Age, titanic_ds)
+summary(model)
+```
+
+Age describes the fare 0.9229% which is not very significant factor to describe the purchsing of fare. Although there is still positive relationship between age and fare. With the 1 unit increase in age, fare increases slightly by 0.35 units. 
+
+The model is :
+
+Fare = 24.3009 + 0.35(Age)
+
+
+# Residual Analysis
+
+
+```{r}
+par(mfrow=c(2,2))
+plot(model)
+
+hist(titanic_ds$Age)
+hist(titanic_ds$Fare)
+```
+
+
+The data is not normal and pattern can be also seen from the plot. Hence, this model is not satisfying the requirements of linear regression and cannot be used for further analysis without fixing the issues. It can be verified from the histogram for 'Fare' above. 
+
+
+
+

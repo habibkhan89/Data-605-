@@ -1,0 +1,221 @@
+---
+title: "Data 605 - HW 6"
+author: "Habib Khan"
+date: "March 8, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1 
+
+A box contains 54 red marbles, 9 white marbles, and 75 blue marbles. If a marble is randomly selected from the box,
+what is the probability that it is red or blue? Express your answer as a fraction or a decimal number rounded to four
+decimal places.
+
+```{r}
+prob1 <- 129/138 * 100
+prob1
+```
+
+# Problem 2
+
+You are going to play mini golf. A ball machine that contains 19 green golf balls, 20 red golf balls, 24 blue golf balls, and 17 yellow golf balls, randomly gives you your ball. What is the probability that you end up with a red golf ball? Express your answer as a simplified fraction or a decimal rounded to four decimal places.
+
+```{r}
+prob2 <- 20/80 * 100
+prob2
+```
+
+# Problem 3
+
+```{r}
+knitr::include_graphics('6-3.png')
+```
+
+```{r}
+prob3 <- ((228+79+252+97+72)+(1399-(215+252))-(728-252))/1399 * 100
+prob3
+```
+
+# Problem 4
+
+Determine if the following events are independent.
+Going to the gym. Losing weight.
+
+Answer: A) Dependent B) Independent
+
+
+Going to gym is independent but losing weight is depending
+
+
+# Problem 5
+
+A veggie wrap at City Subs is composed of 3 different vegetables and 3 different condiments wrapped up in a tortilla. If
+there are 8 vegetables, 7 condiments, and 3 types of tortilla available, how many different veggie wraps can be made?
+
+
+```{r}
+prob5 <- choose(8,3)*choose(7,3)*3
+prob5
+```
+
+# Problem 6
+
+Determine if the following events are independent.
+Jeff runs out of gas on the way to work. Liz watches the evening news.
+
+Answer: A) Dependent B) Independent
+
+They are independent
+
+# Problem 7 
+
+
+The newly elected president needs to decide the remaining 8 spots available in the cabinet he/she is appointing. If there
+are 14 eligible candidates for these positions (where rank matters), how many different ways can the members of the
+cabinet be appointed?
+
+
+```{r}
+prob7 <- 14*13*12*11*10*9*8*7
+prob7
+```
+
+# Problem 8
+
+A bag contains 9 red, 4 orange, and 9 green jellybeans. What is the probability of reaching into the bag and randomly
+withdrawing 4 jellybeans such that the number of red ones is 0, the number of orange ones is 1, and the number of green
+ones is 3? Write your answer as a fraction or a decimal number rounded to four decimal places.
+
+
+```{r}
+gggo <- (9/22) * (8/21) * (7/20) * (4/19)
+ggog <- (9/22) * (8/21) * (4/20) * (7/19)
+gogg <- (9/22) * (4/21) * (8/20) * (7/19)
+oggg <- (4/22) * (9/21) * (8/20) * (7/19)
+prob8 <- gggo + ggog + gogg + oggg 
+prob8 * 100
+```
+
+# Problem 9
+
+Evaluate the following expression.
+11! / 7!
+
+```{r}
+prob9 <- factorial(11)/factorial(7)
+prob9
+```
+
+# Problem 10
+
+Describe the complement of the given event.
+67% of subscribers to a fitness magazine are over the age of 34.
+
+
+33 percent of the subscribers to a fitness magazine are under the age of 34
+
+
+# Problem 11
+
+If you throw exactly three heads in four tosses of a coin you win $97. If not, you pay me $30.
+Step 1. Find the expected value of the proposition. Round your answer to two decimal places.
+Step 2. If you played this game 559 times how much would you expect to win or lose? (Losses must be entered as
+negative.)
+
+```{r}
+A <- 0.5^4 * choose(4,3)
+
+# Step 1
+
+B <- A * 97 - (1-A) *30
+B
+
+# Step 2
+
+B * 559
+```
+
+
+# Problem 12
+
+12. Flip a coin 9 times. If you get 4 tails or less, I will pay you $23. Otherwise you pay me $26.
+Step 1. Find the expected value of the proposition. Round your answer to two decimal places.
+Step 2. If you played this game 994 times how much would you expect to win or lose? (Losses must be entered as
+negative.)
+
+```{r}
+A <- sum(dbinom(4:0,9,0.5))
+
+# Step 1
+
+B <- A * 23 - (1-A)*26
+B
+
+# Step 2
+
+B * 994
+```
+
+
+# Problem 13
+
+The sensitivity and specificity of the polygraph has been a subject of study and debate for years. A 2001 study of the
+use of polygraph for screening purposes suggested that the probability of detecting a liar was .59 (sensitivity) and that
+the probability of detecting a "truth teller" was .90 (specificity). We estimate that about 20% of individuals selected for the screening polygraph will lie.
+
+a. What is the probability that an individual is actually a liar given that the polygraph detected him/her as such? (Show
+me the table or the formulaic solution or both.)
+
+b. What is the probability that an individual is actually a truth-teller given that the polygraph detected him/her as
+such? (Show me the table or the formulaic solution or both.)
+
+c. What is the probability that a randomly selected individual is either a liar or was identified as a liar by the
+polygraph? Be sure to write the probability statement.
+
+
+```{r}
+# Let's add the values first
+
+liar <- 0.2
+truth <- 0.80
+liar_sens <- 0.59
+truth_sens <- 0.90
+
+pos_det_liar <- liar * liar_sens
+false_det_liar <- truth * (1-truth_sens)
+
+#(a)
+actualliar <- pos_det_liar/(pos_det_liar + false_det_liar)
+actualliar
+
+# (B)
+
+pos_det_truth <- truth * truth_sens
+false_det_truth <- liar * (1-liar_sens)
+
+actuallytruth <- pos_det_truth/(pos_det_truth + false_det_truth)
+actuallytruth
+
+
+# (c)
+
+liarsidentified <- liar + false_det_liar
+liarsidentified
+```
+
+
+The probability that a randomly selected individual is liar is 0.28
+
+
+
+
+
+
+
+
+
+

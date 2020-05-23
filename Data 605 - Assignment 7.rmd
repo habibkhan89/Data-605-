@@ -1,0 +1,89 @@
+---
+title: "Data 605 - Assignment 7"
+author: "Habib Khan"
+date: "March 15, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Problem 7.1
+
+Let X1, X2, . . . , Xn be n mutually independent random variables, each of which is uniformly distributed on the integers from 1 to k. Let Y denote the minimum of the Xi’s. Find the distribution of Y .
+
+The function for Y = Min(X1, X2,… Xn) = Xi, where Xi is the minimum value for all independent random variables
+We can model the function as a binomial distribution, such that:
+
+Xi = successful trial X1 to Xi-1, Xi+1 to Xn = failed trials n = # of trials k = population size (total outcomes/trial) p = 1/k (SUCCESS) q = n-1/k (FAILURE)
+
+The binomial distribution for Y is: Y = n!/(n-1)!1! * p^(1) * q^(n-1) Y = n * p * q^(n-1)
+
+Y = n * (1/k)* (n-1/k)^(n-1) Y = n * (1/k) * (n-1)(n-1)/k(n-1) Y = n * (n-1)(n-1)/kn
+
+
+# Problem 7.2
+
+```{r}
+knitr::include_graphics('7-2.png')
+```
+
+## (a)
+
+```{r}
+# Creating vectors and calculating prob for failure after 8 years
+
+prob <- 1/10
+1-sum(dgeom(0:7, prob))
+```
+
+## (b)
+
+```{r}
+exp <- 1/10
+pexp(8, exp, lower.tail = FALSE)
+
+# Mean
+
+1/exp
+
+# Standard Deviation
+
+1/exp
+```
+
+## (c)
+
+```{r}
+binom <- 1/10
+n <- 8
+
+dbinom(0,n,binom)
+
+# mean
+
+binom*n
+
+# SD
+
+sqrt(binom*(1-binom)*n)
+```
+
+## (d)
+
+```{r}
+p <- 1/10
+n <- 8
+lambda <- n*p
+dpois(0, lambda)
+
+# mean
+lambda
+
+# SD
+
+sqrt(lambda)
+```
+

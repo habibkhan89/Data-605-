@@ -1,0 +1,45 @@
+---
+title: "Data 605 - Assignment 9"
+author: "Habib Khan"
+date: "March 29, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1 
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::include_graphics('9-1.png')
+```
+
+```{r}
+# (a)
+
+a <- pnorm(100, mean=100, sd = sqrt(0.25*364), lower.tail = FALSE)
+a
+
+# (b)
+b <- pnorm(110, mean=100, sd = sqrt(0.25*364), lower.tail = FALSE)
+b
+
+# (c)
+c <- pnorm(120, mean=100, sd = sqrt(0.25*364), lower.tail = FALSE)
+c
+
+```
+
+# Problem 2
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::include_graphics('9-2.png')
+```
+
+# Problem 3
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+knitr::include_graphics('9-3.png')
+```
+

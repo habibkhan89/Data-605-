@@ -1,0 +1,113 @@
+---
+title: "Data 605 - Assignment 12"
+author: "Habib Khan"
+date: "April 26, 2020"
+output: 
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+# Week 13 Assignment - Multiple Regression in R
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+library(tidyr)
+library(ggplot2)
+library(dplyr)
+knitr::include_graphics('12.png')
+```
+
+```{r}
+# Loading the data
+
+data <- read.csv("who.csv", header = TRUE)
+glimpse(data)
+head(data) %>% kable() 
+```
+
+## Q1
+
+```{r}
+# Visualize the predictor
+ggplot(data, aes(TotExp, LifeExp))+geom_point()+theme_classic()+geom_smooth(method="lm", se = FALSE)+labs(title="Life expectancy vs total expectancy")
+
+# Creating a regression model
+model <- lm(data$LifeExp ~ data$TotExp)
+summary(model)
+
+# Checking the normality 
+qqnorm(model$residuals)
+qqline(model$residuals)
+```
+
+
+There is positive relationship between lifeExp and TotExp as the line shows above in the scatterplot. Also to double check, regression model was calculated and result shows that the model 25.77% variance and with the 1 unit increases in TotExp, LifeExp will be increased with 6.29 x 10^5. LifeExp has positive significant impact on TotExp. The problem is the qqnorm plot does not show randomness and hence data isn't random. 
+
+## Q2
+
+```{r}
+# Transformed regression
+t_TotExp <- data$TotExp ^ 0.06
+t_LifeExp <- data$LifeExp ^ 4.6
+
+# Visualize with transformed variables
+ggplot(data, aes(x=t_LifeExp,y=t_TotExp))+geom_point()+geom_smooth(method="lm",se=FALSE)
+
+
+model2 <- lm(t_LifeExp ~ t_TotExp)
+summary(model2)
+```
+
+After transforming both variables, the model has improved significantly. Now the model predicts 72.98 percent. Also, with the 1 unit increase in Life, LifeExp will increase with 620060216 units. It can be seen that the new model is better than the old model. It has improved significantly. 
+
+## Q3
+
+```{r}
+# Forecast life expectancy with TotExp ^ 0.06 = 1.5
+
+life_exp1.5 <- (-736527910 + 620060216*1.5) ^ (1/4.6)
+print(paste("The life expectancy is ", life_exp1.5, "when Tot Exp ^ 0.06 = 1.5"))
+
+# Forecast life expectancy with Total Exp ^ 0.06 = 2.5
+life_exp2.5 <- (-736527910 + 620060216*2.5) ^ (1/4.6)
+print(paste("The life expectancy is ", life_exp2.5, "when Tot Exp ^ 0.06 = 2.5"))
+```
+
+
+## Q4 
+
+```{r}
+model4 <- lm(LifeExp ~ TotExp + PropMD + PropMD*TotExp, data=data)
+summary(model4)
+
+qqnorm(model4$residuals)
+qqline(model4$residuals)
+```
+
+The model is:
+
+LifeExp = 6.27710 + 7.233^-05(TotExp) + 1.497^03(PropMD) - 6.026^-03(TotExp*PropMD)
+
+Model shows only 35.74 variance which is not very good. All the p-values for predictors are very small and hence they all having significant impact on LifeExp. F-statistics' p-value shows that there is variation in the mean of predictors. Residuals show that the there is normal distribution around 0 and hence it's good.
+
+
+## Q5
+
+
+```{r}
+lifeExp_5 <- (6.277*10) + (1.497*10^3)*0.03 + (7.233*10^-5)*14 - (6.025*10^-3) * (14*0.03)
+print(paste0("The life expectancy when PropMD = 0.03 and TotExp = 14 is ", lifeExp_5))
+```
+
+Although the result says almost 107 years but it's very much skewed and not realistic. 
+
+
+
+
+
+
+
+
+
+
+

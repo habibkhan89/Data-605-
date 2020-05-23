@@ -1,0 +1,37 @@
+---
+title: "Data 605 - Assignment 13"
+author: "Habib Khan"
+date: "May 3, 2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r}
+library(knitr)
+knitr::include_graphics('13-1.png')
+knitr::include_graphics('13-2.png')
+```
+
+
+# Problem 5
+
+```{r, eval=FALSE}
+order <- function(x) {
+  cost <- x* 8.25
+  storage <- 0
+  i=0
+  while(ceiling((110/x)-i*110/365)>0){
+    storage <- storage +(3.75/365)*ceiling((110/x-i*110/365))
+    i <- i + 1
+    if(i == 10000){
+      break
+    }
+  }
+  storage <- storage*x
+  cost <- cost + storage
+  return(cost)
+}
+
+```
+

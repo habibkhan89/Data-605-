@@ -1,0 +1,26 @@
+---
+title: "Data 605 - Week 14 Discussion"
+author: "Habib Khan"
+date: "May 3, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 7.6
+
+Find the volume of y = 5x from 1 to 2, rotated around the x axis
+
+I found it easier to calculate using R
+
+```{r}
+library(stats)
+
+step1 <- function(x){5 * x}
+
+step2 <- function(x){pi * step1(x)^2}
+integrate(step2,1,2)
+```
+

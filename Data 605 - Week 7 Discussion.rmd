@@ -1,0 +1,44 @@
+---
+title: "Data 605 - Week 7 Discussion"
+author: "Habib Khan"
+date: "March 15, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+knitr::include_graphics('7.png')
+```
+# (a)
+
+```{r}
+# Let's find out the probability of no one having this blood type in a city of 10,000 people
+
+exp(1)^(-10)*100
+```
+
+Probability for no one having this blood type is 0.00453% in a city of 10,000 people
+
+
+# (b)
+
+```{r}
+round(1000*log(2),0)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

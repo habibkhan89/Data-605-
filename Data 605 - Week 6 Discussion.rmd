@@ -1,0 +1,22 @@
+---
+title: "Data 605 - Week 6 Discussion"
+author: "Habib Khan"
+date: "March 8, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem 1 - Page 88
+
+Four people are to be arranged in a row to have their picture taken. In how many ways can this be done?
+
+Position 1 can be taken by all 4 persons, position 2 by 3, position 3 by 2 person and position 4 by 1 person.
+
+```{r}
+factorial(4)
+```
+
+This can be done in 24 ways. 

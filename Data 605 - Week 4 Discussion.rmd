@@ -1,0 +1,29 @@
+---
+title: "Data 605 - Week 4 Discussion"
+author: "Habib Khan"
+date: "February 19, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+knitr::include_graphics('Week4.png')
+```
+
+```{r}
+# Creating matrix into S
+S <- matrix(c(-1,4,1,1,4,-1,5,0,1,6,-2,2,2,-1,2,5), 4,4)
+S
+
+# RREF
+library(pracma)
+answer <- rref(S)
+answer
+```
+
+The identity matrix is nonsingular and have null space therefore it is injective. U's dimension is 4 and kernel is 0 therefore it is also surjective. Lastly, transformation is injective and surjective therefore it is also invertible as well as per ILTIS theorem.

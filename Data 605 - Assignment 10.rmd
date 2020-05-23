@@ -1,0 +1,36 @@
+---
+title: "Data 605 - Assignment 10"
+author: "Habib Khan"
+date: "April 5, 2020"
+output: html_document
+---
+
+# Problem 1
+
+```{r, echo=FALSE}
+knitr::include_graphics('10.png')
+```
+
+## (a)
+
+```{r}
+prob_win <- 0.4
+minn <- 1
+maxx <- 8
+prob_loss <- 1 - prob_win
+
+timid <- (1 - ((prob_loss/prob_win)^minn)) / (1- ((prob_loss/prob_win)^maxx))
+print(paste0("The probability for winning 8 dollars before he losing all his money if he bets 1 dollar each time is ", timid))
+```
+
+## (b)
+
+```{r}
+bold <- dbinom(3, 3, 0.4)
+print(paste0("The probability for winning 8 dollars before he losing all his money if he bets, etach time, as much as possible but not more than necessary to bring his fortune up to 8 dollars is ", bold))
+```
+
+## (c)
+
+Timid strategy shows that Smith's probability of getting out of jail is 0.02 while with bold stragegy he has better chance of getting out of jail as it is 0.064. Thus the answer is BOLD STRATEGY
+

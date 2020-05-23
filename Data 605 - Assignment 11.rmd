@@ -1,0 +1,57 @@
+---
+title: "Data 605 - Week 12 Assignment"
+author: "Habib Khan"
+date: "April 19, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Question
+
+Using the cars dataset in R, build a linear model for stopping distance as a function of speed and replicate the analysis of your textbook chapter 3 (Visualization, quality evaluation of the model and residual analysis.
+
+```{r}
+# loading libraries
+library(tidyr)
+library(knitr)
+library(kableExtra)
+
+
+# Creating a copy of cars dataset
+cars_ds <- cars
+head(cars_ds) %>% kable() 
+```
+
+```{r}
+# Plotting the data in scatterplot to see the relationship between speed and distance
+library(ggplot2)
+ggplot(cars_ds, aes(x=speed, y=dist))+geom_point()+geom_smooth()+theme_classic()
+  labs(title="Relationship between distance and speed")
+```
+
+It seems like there is positive relationship between speed and distance as per the visuals. Now let's double check it through using regression function in R.
+
+```{r}
+# Creating a regression function
+model <- lm(dist ~ speed, cars_ds)
+summary(model)
+```
+
+According to the results, speed has positive relationship with the distance. Dist is explained 65.11 percent by speed. Also with 1 mph increase in speed, distance will be increased by 3.93 units or vice versa.
+
+The function is:
+
+Dist = -17.579 + 3.9324(Speed)
+
+
+```{r}
+# Residual analysis
+
+par(mfrow=c(2,2))
+plot(model)
+```
+
+No pattern can be seen in the data. Data is random and heteroskidasticity is satisfied. Also, the data is normally distributed. So we can say that model's quality is good and we can rely on the conclusion. The model is overall good and there is positive relationship between distance and speed. 

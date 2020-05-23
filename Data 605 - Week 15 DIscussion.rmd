@@ -1,0 +1,10 @@
+---
+title: "Data 605 - Week 15 Discussion"
+author: "Habib Khan"
+date: "May 17, 2020"
+output: html_document
+---
+```{r}
+knitr::include_graphics('15_d.png')
+```
+
